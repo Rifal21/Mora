@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class BlogCategory extends Model
+{
+    /** @use HasFactory<\Database\Factories\BlogCategoryFactory> */
+    use HasFactory, HasUuid;
+    protected $guarded = ['id'];
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    public function posts()
+    {
+        return $this->hasMany(BlogPost::class, 'blog_category_id', 'id');
+    }
+}
