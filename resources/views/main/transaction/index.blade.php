@@ -9,7 +9,7 @@
                 <select name="bisnis_id" onchange="this.form.submit()"
                     class="border border-gray-300 p-2 rounded flex-1 shadow-sm focus:ring-2 focus:ring-blue-400">
                     <option value="">-- Pilih Bisnis --</option>
-                    @foreach ($bisnis as $b)
+                    @foreach ($bisnis->where('user_id', Auth::id())->where('status', 'active') as $b)
                         <option value="{{ $b->id }}" {{ session('bisnis_id') == $b->id ? 'selected' : '' }}>
                             {{ $b->name }}
                         </option>
