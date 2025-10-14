@@ -13,7 +13,7 @@
 
 
         <!-- Table -->
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-md overflow-auto">
             <table class="min-w-full text-sm text-gray-700">
                 <thead class="bg-gray-100 border-b text-gray-800 uppercase text-xs font-semibold">
                     <tr>
