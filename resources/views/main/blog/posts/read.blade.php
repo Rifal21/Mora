@@ -39,7 +39,7 @@
 
                 <div class="flex items-center gap-1">
                     <i class="fa-solid fa-tags text-gray-400"></i>
-                    <span>{{ $blogPost->tags ?? '-' }}</span>
+                    <span>{{ $blogPost->category->name ?? '-' }}</span>
                 </div>
             </div>
 
