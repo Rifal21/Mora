@@ -34,7 +34,7 @@
                         class="fa-solid fa-link mr-2"></i>Trends</a></li>
             <li><a href="{{ route('transactions.list') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
                         class="fa-solid fa-list-check mr-2"></i>List Transaksi</a></li>
-            @if (auth()->user()->role->name === 'Super Admin')
+            @if (auth()->check() && auth()->user()->role->name === 'Super Admin')
                 <hr class="border-gray-200 my-1">
                 <li><a href="{{ route('blogCategories.index') }}"
                         class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
@@ -213,7 +213,7 @@
             </div>
         </div>
 
-        @if (auth()->user()->role->name === 'Super Admin')
+        @if (auth()->check() && auth()->user()->role->name === 'Super Admin')
             <div class="relative flex flex-col items-center">
                 <button id="mobileTrendsBtn" class="flex flex-col items-center focus:outline-none">
                     <div class="w-10 mb-1 transition-all"></div>
