@@ -61,7 +61,8 @@ class RegisteredUserController extends Controller
                 'place_of_birth' => $validated['place_of_birth'] ?? null,
                 'birth_date'     => $validated['birth_date'] ?? null,
                 'gender'         => $validated['gender'] ?? null,
-                'quota_ai'       => $quota_ai
+                'quota_ai'       => $quota_ai,
+                'quota_trx' => 100
             ]
         );
 

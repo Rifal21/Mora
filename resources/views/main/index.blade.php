@@ -56,9 +56,16 @@
 
             <!-- Transaksi Terakhir -->
             <div class="bg-white rounded-2xl shadow-md p-6">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-indigo-600"></i> Transaksi Terakhir
-                </h2>
+                <div class="flex justify-between items-start">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-indigo-600"></i> Transaksi Terakhir
+                    </h2>
+                    @if (auth()->check() && auth()->user()->profile->user_type === 'free')
+                        <p>
+                            sisa transaksi: <span class="text-red-500">{{ auth()->user()->profile->quota_trx }}x</span>
+                        </p>
+                    @endif
+                </div>
 
                 @if ($transactions->isEmpty())
                     <p class="text-gray-500 italic">Belum ada transaksi.</p>

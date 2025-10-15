@@ -11,7 +11,7 @@
             </button>
         </div>
 
-        <div class="overflow-x-auto shadow-lg rounded-lg">
+        <div class="hidden md:block overflow-x-auto shadow-lg rounded-lg">
             <table class="min-w-full bg-white rounded-lg overflow-hidden">
                 <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
                     <tr>
@@ -65,25 +65,80 @@
                                     <i class="fa-solid fa-pen text-blue-500"></i>
                                 </button>
 
-
                                 <form action="{{ route('products.destroy', $prod->id) }}" method="POST"
                                     onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800"><i
-                                            class="fa-solid fa-trash"></i></button>
+                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="9" class="px-6 py-4 text-center text-gray-500 italic">
                                 Tidak ada produk.
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="md:hidden space-y-4">
+            @forelse ($products as $prod)
+                <div class="bg-white rounded-xl shadow p-4 flex flex-col gap-3">
+                    <div class="flex gap-4">
+                        @if ($prod->images && count($prod->images) > 0)
+                            <img src="{{ asset('storage/' . $prod->images[0]) }}" class="h-16 w-16 rounded object-cover"
+                                alt="Gambar Produk">
+                        @else
+                            <div
+                                class="h-16 w-16 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-lg">
+                                <i class="fa-solid fa-image"></i>
+                            </div>
+                        @endif
+
+                        <div class="flex-1">
+                            <h2 class="font-semibold text-gray-800">{{ $prod->name }}</h2>
+                            <p class="text-sm text-gray-500">{{ $prod->category->name ?? '-' }}</p>
+                            <p class="text-sm text-gray-600 mt-1">Rp {{ number_format($prod->price, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-2">
+                        <span
+                            class="px-2 py-1 rounded-full text-xs font-semibold 
+                            {{ $prod->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                            {{ ucfirst($prod->status) }}
+                        </span>
+
+                        <div class="flex gap-3">
+                            <button class="edit-product-btn" data-id="{{ $prod->id }}"
+                                data-bisnis_id="{{ $prod->bisnis_id }}" data-category_id="{{ $prod->category_id }}"
+                                data-name="{{ $prod->name }}" data-price="{{ $prod->price }}"
+                                data-stock="{{ $prod->stock }}" data-unit="{{ $prod->unit }}"
+                                data-description="{{ $prod->description }}" data-status="{{ $prod->status }}"
+                                data-images='@json($prod->images ?? [])'>
+                                <i class="fa-solid fa-pen text-blue-500"></i>
+                            </button>
+
+                            <form action="{{ route('products.destroy', $prod->id) }}" method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit">
+                                    <i class="fa-solid fa-trash text-red-500"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <p class="text-center text-gray-500 italic">Tidak ada produk.</p>
+            @endforelse
         </div>
     </div>
 

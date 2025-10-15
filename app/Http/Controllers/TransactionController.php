@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -38,6 +39,12 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        if(Auth::user()->profile->user_type === 'free'){
+            if(auth()->user()->profile->quota_trx <= 0){
+                return redirect()->route('transactions.list')->with('error', 'Kuota transaksi habis. Silahkan upgrade ke pro!');
+            }
+            auth()->user()->profile->decrement('quota_trx', 1);
+        }
         if($request->trx_type === 'catkeu') {
             $validate = $request->validate([
                 'user_id' => 'required|exists:users,id',
@@ -172,7 +179,24 @@ class TransactionController extends Controller
 
     public function list()
     {
-        $transactions = Transaction::latest()->paginate(20);
+        $user = Auth::user();
+
+        // Ambil semua bisnis milik user
+        $bisnisList = $user->bisnis()->pluck('id');
+
+        $transactions = Transaction::with(['bisnis', 'user'])
+            ->where(function ($q) use ($bisnisList, $user) {
+                if ($bisnisList->isNotEmpty()) {
+                    $q->whereIn('bisnis_id', $bisnisList)
+                        ->orWhere('user_id', $user->id);
+                } else {
+                    $q->where('user_id', $user->id);
+                }
+            })
+            ->latest()
+            ->paginate(20);
+
+
         return view('main.transaction.transaction-list', compact('transactions'));
     }
 }
