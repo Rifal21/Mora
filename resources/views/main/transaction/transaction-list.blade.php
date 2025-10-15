@@ -5,10 +5,9 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
             <h1 class="text-2xl font-bold text-gray-800">Daftar Transaksi</h1>
-            <a href="{{ route('transactions.create') }}"
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-all w-full sm:w-auto text-center">
-                <i class="fa-solid fa-plus mr-1"></i> Tambah Transaksi
-            </a>
+            <button id="openModalBtn"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition-all"> <i
+                    class="fa-solid fa-plus mr-1"></i> Tambah Transaksi </button>
         </div>
 
         <!-- Table Wrapper -->
