@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Bisnis;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class TransactionController extends Controller
         $bisnis_set = session('bisnis_id');
         $products = Product::where('bisnis_id', $bisnis_set)->where('stock', '>', 0)->latest()->get();
         $transactions = Transaction::where('bisnis_id', $bisnis_set)->latest()->get();
-        return view('main.transaction.index', compact('bisnis', 'products', 'transactions'));
+        $categories = ProductCategory::where('bisnis_id', $bisnis_set)->where('status', 'active')->latest()->get();
+        return view('main.transaction.index', compact('bisnis', 'products', 'transactions', 'categories'));
     }
 
     /**

@@ -22,12 +22,24 @@
             <!-- Produk List -->
             <div
                 class="lg:w-1/2 w-full bg-white/70 backdrop-blur-sm p-5 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-gray-100">
-                <div class="flex justify-between items-center mb-4">
+
+                <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
                     <h2 class="font-bold text-xl text-gray-800 flex items-center gap-2">
                         <i class="fa-solid fa-boxes-stacked text-indigo-500"></i> Semua Produk
                     </h2>
-                    <input type="text" id="search-product" placeholder="Cari produk..."
-                        class="border p-2 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-indigo-400 w-1/2 transition">
+
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <select id="category-filter"
+                            class="border border-gray-300 p-2 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-indigo-400 transition w-full md:w-auto">
+                            <option value="">Filter</option>
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+
+                        <input type="text" id="search-product" placeholder="Cari produk..."
+                            class="border p-2 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-indigo-400 transition w-full md:w-auto">
+                    </div>
                 </div>
 
                 <div id="product-list"
@@ -48,7 +60,7 @@
                         <button
                             class="product-btn group bg-gradient-to-br from-white to-gray-50 border border-gray-200 hover:border-indigo-400 hover:shadow-lg transition-all duration-200 rounded-xl p-3 flex flex-col items-center justify-between text-gray-800 relative overflow-hidden"
                             data-id="{{ $product->id }}" data-name="{{ $product->name }}"
-                            data-price="{{ $product->price }}">
+                            data-price="{{ $product->price }}" data-category="{{ $product->category_id }}">
                             @if ($image)
                                 <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}"
                                     class="w-24 h-24 object-cover rounded-lg mb-2 transition-transform duration-200 group-hover:scale-105">
@@ -60,7 +72,7 @@
                             @endif
                             <div class="text-center">
                                 <div class="font-semibold text-sm truncate">{{ $product->name }}</div>
-                                <div class="text-xs">stock: {{ $product->stock }}</div>
+                                <div class="text-xs">Stock: {{ $product->stock }}</div>
                                 <div class="text-sm text-indigo-600 mt-1 font-medium">
                                     Rp {{ number_format($product->price) }}
                                 </div>
@@ -69,6 +81,7 @@
                     @endforeach
                 </div>
             </div>
+
 
             <!-- Transaction Cart -->
             <div
@@ -248,11 +261,40 @@
             document.getElementById('qris-container').classList.toggle('hidden', this.value !== 'qris');
         });
 
+        // document.getElementById('search-product').addEventListener('input', function() {
+        //     const search = this.value.toLowerCase();
+        //     document.querySelectorAll('#product-list .product-btn').forEach(btn => {
+        //         const name = btn.dataset.name.toLowerCase();
+        //         btn.style.display = name.includes(search) ? 'flex' : 'none';
+        //     });
+        // });
+        // Filter produk berdasarkan kategori
+        document.getElementById('category-filter').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const search = document.getElementById('search-product').value.toLowerCase();
+
+            document.querySelectorAll('#product-list .product-btn').forEach(btn => {
+                const category = btn.dataset.category;
+                const name = btn.dataset.name.toLowerCase();
+                const matchCategory = !selectedCategory || category === selectedCategory;
+                const matchSearch = !search || name.includes(search);
+
+                btn.style.display = matchCategory && matchSearch ? 'flex' : 'none';
+            });
+        });
+
+        // Integrasi filter kategori + pencarian bersamaan
         document.getElementById('search-product').addEventListener('input', function() {
             const search = this.value.toLowerCase();
+            const selectedCategory = document.getElementById('category-filter').value;
+
             document.querySelectorAll('#product-list .product-btn').forEach(btn => {
                 const name = btn.dataset.name.toLowerCase();
-                btn.style.display = name.includes(search) ? 'flex' : 'none';
+                const category = btn.dataset.category;
+                const matchCategory = !selectedCategory || category === selectedCategory;
+                const matchSearch = !search || name.includes(search);
+
+                btn.style.display = matchCategory && matchSearch ? 'flex' : 'none';
             });
         });
     </script>
