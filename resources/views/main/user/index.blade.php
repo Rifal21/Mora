@@ -22,6 +22,7 @@
                         <th class="px-6 py-3 text-left">Role</th>
                         <th class="px-6 py-3 text-left">Tipe User</th>
                         <th class="px-6 py-3 text-left">Quota AI</th>
+                        <th class="px-6 py-3 text-left">Quota TRX</th>
                         <th class="px-6 py-3 text-left">Status</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
@@ -31,7 +32,7 @@
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-6 py-4 text-gray-700">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4">
-                                @if ($user->profile->avatar)
+                                @if ($user->profile?->avatar)
                                     <img class="w-10 h-10 rounded-full object-cover"
                                         src="{{ asset('storage/' . $user->profile->avatar) }}" alt="User avatar">
                                 @else
@@ -50,11 +51,12 @@
                             <td class="px-6 py-4">
                                 <span
                                     class="px-2 py-1 rounded-full text-xs font-semibold 
-                                    {{ $user->profile->user_type === 'pro' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700' }}">
-                                    {{ ucfirst($user->profile->user_type ?? '-') }}
+                                    {{ $user->profile?->user_type === 'pro' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700' }}">
+                                    {{ ucfirst($user->profile?->user_type ?? '-') }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-gray-600">{{ $user->profile->quota_ai ?? 0 }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ $user->profile->quota_trx ?? 0 }}</td>
                             <td class="px-6 py-4">
                                 <span
                                     class="px-2 py-1 rounded-full text-xs font-semibold 
