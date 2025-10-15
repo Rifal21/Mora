@@ -36,8 +36,8 @@
             <div class="mb-0 text-center">
                 <a href="/" class="flex items-center justify-center space-x-3">
                     {{-- <x-application-logo class="w-16 h-16 text-white drop-shadow-xl" /> --}}
-                    <img src="{{ asset('assets/images/logo mora.png') }}" class="w-60 h-60 text-white drop-shadow-xl"
-                        alt="">
+                    <img src="{{ asset('assets/images/logo mora.png') }}"
+                        class="lg:w-1/4 w-full h-60 text-white drop-shadow-xl object-cover" alt="">
                     {{-- <span class="text-3xl font-semibold text-white tracking-tight drop-shadow-md">
                         {{ config('app.name', 'POS App') }}
                     </span> --}}
