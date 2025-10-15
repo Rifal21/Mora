@@ -5,6 +5,7 @@ use App\Http\Controllers\BisnisController;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManagementUserController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -30,10 +31,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions-list', [TransactionController::class, 'list'])->name('transactions.list');
     Route::get('/konsultasi', [AiChatController::class, 'index'])->name('ai.chat');
     Route::post('/konsultasi/send', [AiChatController::class, 'send'])->name('ai.chat.send');
-    Route::resource('blogCategories', BlogCategoryController::class);
     Route::resource('blogPosts', BlogPostController::class);
-    Route::get('/blogPost-list', [BlogPostController::class, 'list'])->name('blogPosts.list');
     Route::get('/blogPost/{slug}', [BlogPostController::class, 'read'])->name('blogPosts.read');
+});
+
+Route::middleware('auth', 'admin')->group(function () {
+    Route::get('/blogPost-list', [BlogPostController::class, 'list'])->name('blogPosts.list');
+    Route::resource('blogCategories', BlogCategoryController::class);
+    Route::resource('users', ManagementUserController::class);
 });
 
 Route::middleware('auth')->group(function () {

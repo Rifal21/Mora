@@ -41,6 +41,8 @@
                             class="fa-solid fa-list-check mr-2"></i>Kategori Artikel</a></li>
                 <li><a href="{{ route('blogPosts.list') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
                             class="fa-solid fa-newspaper mr-2"></i>Artikel</a></li>
+                <li><a href="{{ route('users.index') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
+                            class="fa-solid fa-users mr-2"></i>Users</a></li>
             @endif
         </ul>
     </div>
@@ -76,17 +78,30 @@
                 <button id="profileButton"
                     class="flex items-center focus:outline-none focus:ring-2 focus:ring-white/30 rounded-full"
                     aria-haspopup="true" aria-expanded="false" aria-label="Profile menu">
-                    <img class="h-9 w-9 rounded-full object-cover ring-2 ring-white/30"
-                        src="{{ asset('storage/' . Auth::user()->profile->avatar) ?? 'https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png' }}"
-                        alt="{{ Auth::user()->name }}">
+                    @if (Auth::user()->profile && Auth::user()->profile->avatar)
+                        <img class="h-10 w-10 rounded-full mr-3 ring-1 ring-gray-300 object-cover"
+                            src="{{ asset('storage/' . Auth::user()->profile->avatar) }}" alt="User avatar">
+                    @else
+                        <div
+                            class="h-10 w-10 rounded-full mr-3 ring-1 ring-gray-300 bg-gray-200 flex items-center justify-center text-gray-500">
+                            <i class="fa-solid fa-user text-lg"></i>
+                        </div>
+                    @endif
                 </button>
 
                 <ul id="profileDropdown"
-                    class="hidden absolute right-0 mt-3 w-56 bg-white/90 backdrop-blur-md border border-gray-200/40 rounded-xl shadow-lg">
+                    class="hidden absolute right-0 mt-3 w-64 bg-white/90 backdrop-blur-md border border-gray-200/40 rounded-xl shadow-lg">
                     <li class="flex items-center px-4 py-3 border-b border-gray-100/40">
-                        <img class="h-10 w-10 rounded-full mr-3 ring-1 ring-gray-300"
-                            src="{{ asset('storage/' . Auth::user()->profile->avatar) ?? 'https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png' }}"
-                            alt="User avatar">
+                        @if (Auth::user()->profile && Auth::user()->profile->avatar)
+                            <img class="h-10 w-10 rounded-full mr-3 ring-1 ring-gray-300 object-cover"
+                                src="{{ asset('storage/' . Auth::user()->profile->avatar) }}" alt="User avatar">
+                        @else
+                            <div
+                                class="h-10 w-10 rounded-full mr-3 ring-1 ring-gray-300 bg-gray-200 flex items-center justify-center text-gray-500">
+                                <i class="fa-solid fa-user text-lg"></i>
+                            </div>
+                        @endif
+
                         <div>
                             <p class="text-gray-800 font-semibold">{{ Auth::user()->name }}</p>
                             <p class="text-gray-500 text-sm">{{ Auth::user()->email }}</p>
@@ -210,6 +225,11 @@
                 <a href="{{ route('products.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
                     <i class="fa-solid fa-box mr-2"></i> Produk
                 </a>
+                @if (auth()->check() && auth()->user()->role->name === 'Super Admin')
+                    <a href="{{ route('users.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
+                        <i class="fa-solid fa-users mr-2"></i> Users
+                    </a>
+                @endif
             </div>
         </div>
 
