@@ -33,7 +33,7 @@
             <li><a href="{{ route('blogPosts.index') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
                         class="fa-solid fa-link mr-2"></i>Trends</a></li>
             <li><a href="{{ route('transactions.list') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
-                        class="fa-solid fa-list-check mr-2"></i>List Transaksi</a></li>
+                        class="fa-solid fa-money-check mr-2"></i>Catatan Keuangan</a></li>
             @if (auth()->check() && auth()->user()->role->name === 'Super Admin')
                 <hr class="border-gray-200 my-1">
                 <li><a href="{{ route('blogCategories.index') }}"

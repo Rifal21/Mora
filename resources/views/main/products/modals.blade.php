@@ -76,11 +76,11 @@
                 </select>
             </div>
 
-            <div class="flex gap-2 mt-4">
+            <div class="flex justify-end gap-2 mt-4">
+                <button type="button" onclick="closeModal('addProductModal')"
+                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Batal</button>
                 <button type="submit"
                     class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Simpan</button>
-                <button type="button" onclick="closeModalProduct('addProductModal')"
-                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Batal</button>
             </div>
         </form>
     </div>
@@ -163,11 +163,11 @@
                 </select>
             </div>
 
-            <div class="flex gap-2 mt-4">
-                <button type="submit"
-                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Simpan</button>
+            <div class="flex justify-end gap-2 mt-4">
                 <button type="button" onclick="closeModal('editProductModal')"
                     class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Batal</button>
+                <button type="submit"
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Simpan</button>
             </div>
         </form>
     </div>

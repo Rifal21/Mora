@@ -47,10 +47,15 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 flex justify-center items-center gap-3">
-                                <a href="{{ route('product-categories.edit', $cat->id) }}"
-                                    class="text-blue-600 hover:text-blue-800 text-sm">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
+                                <button
+                                    onclick="openEditModal({ 
+                            id: '{{ $cat->id }}',
+                            bisnis_id: '{{ $cat->bisnis_id }}',
+                            name: '{{ addslashes($cat->name) }}',
+                            status: '{{ $cat->status }}',
+                            image: '{{ $cat->image ?? '' }}'
+                        })"
+                                    class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-pen"></i></button>
                                 <form action="{{ route('product-categories.destroy', $cat->id) }}" method="POST"
                                     onsubmit="return confirm('Yakin ingin menghapus kategori ini?')" class="inline">
                                     @csrf

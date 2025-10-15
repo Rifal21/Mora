@@ -60,13 +60,10 @@
                             @endif
                             <div class="text-center">
                                 <div class="font-semibold text-sm truncate">{{ $product->name }}</div>
-                                <div class="text-xs text-indigo-600 mt-1 font-medium">
+                                <div class="text-xs">stock: {{ $product->stock }}</div>
+                                <div class="text-sm text-indigo-600 mt-1 font-medium">
                                     Rp {{ number_format($product->price) }}
                                 </div>
-                            </div>
-                            <div
-                                class="absolute bottom-2 right-2 bg-indigo-500 text-white text-xs px-2 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition">
-                                Tambah +
                             </div>
                         </button>
                     @endforeach

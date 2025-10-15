@@ -20,7 +20,7 @@ class TransactionController extends Controller
     {
         $bisnis = Bisnis::all();
         $bisnis_set = session('bisnis_id');
-        $products = Product::where('bisnis_id', $bisnis_set)->get();
+        $products = Product::where('bisnis_id', $bisnis_set)->where('stock', '>', 0)->latest()->get();
         $transactions = Transaction::where('bisnis_id', $bisnis_set)->latest()->get();
         return view('main.transaction.index', compact('bisnis', 'products', 'transactions'));
     }
@@ -116,6 +116,12 @@ class TransactionController extends Controller
                     'price' => $item['price'],
                     'total' => $item['total'],
                 ]);
+
+                $product = Product::find($item['product_id']);
+                if($product->stock < $item['quantity']){
+                    return redirect()->back()->with('error', 'Stok produk tidak mencukupi.');
+                }
+                $product->decrement('stock', $item['quantity']);
             }
     
             return redirect()->back()->with('success', 'Transaksi Berhasil!');
