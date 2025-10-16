@@ -43,7 +43,7 @@ class TransactionController extends Controller
         // dd($request->all());
         if(Auth::user()->profile->user_type === 'free'){
             if(auth()->user()->profile->quota_trx <= 0){
-                return redirect()->route('transactions.list')->with('error', 'Kuota transaksi habis. Silahkan upgrade ke pro!');
+                return redirect()->route('billing.index')->with('error', 'Kuota transaksi habis. Silahkan upgrade ke pro!');
             }
             auth()->user()->profile->decrement('quota_trx', 1);
         }
