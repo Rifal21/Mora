@@ -22,7 +22,20 @@ class TransactionController extends Controller
         $bisnis = Bisnis::all();
         $bisnis_set = session('bisnis_id');
         $products = Product::where('bisnis_id', $bisnis_set)->where('stock', '>', 0)->latest()->get();
-        $transactions = Transaction::where('bisnis_id', $bisnis_set)->latest()->get();
+        // $transactions = Transaction::where('bisnis_id', $bisnis_set)->latest()->get();
+        $user = Auth::user();
+        $bisnisList = $user->bisnis()->pluck('id');
+        $transactions = Transaction::with(['bisnis', 'user'])
+            ->where(function ($q) use ($bisnisList, $user) {
+                if ($bisnisList->isNotEmpty()) {
+                    $q->whereIn('bisnis_id', $bisnisList)
+                        ->orWhere('user_id', $user->id);
+                } else {
+                    $q->where('user_id', $user->id);
+                }
+            })
+            ->latest()
+            ->paginate(20);
         $categories = ProductCategory::where('bisnis_id', $bisnis_set)->where('status', 'active')->latest()->get();
         return view('main.transaction.index', compact('bisnis', 'products', 'transactions', 'categories'));
     }
