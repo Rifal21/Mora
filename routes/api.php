@@ -3,9 +3,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BlogCategoryController;
 use App\Http\Controllers\Api\BlogPostController;
+use App\Http\Controllers\Api\DokuNotificationController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/doku/notif-hook', [DokuNotificationController::class, 'handleNotification']);
 
 // Public routes
 Route::get('/categories', [BlogCategoryController::class, 'index']);

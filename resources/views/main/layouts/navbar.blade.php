@@ -43,6 +43,9 @@
                             class="fa-solid fa-newspaper mr-2"></i>Artikel</a></li>
                 <li><a href="{{ route('users.index') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-800"><i
                             class="fa-solid fa-users mr-2"></i>Users</a></li>
+                <a href="{{ route('plans.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
+                    <i class="fa-solid fa-crown mr-2"></i> Plans
+                </a>
             @endif
         </ul>
     </div>
@@ -110,12 +113,12 @@
                     <li><a href="{{ route('my-profile.index') }}"
                             class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i class="fa-solid fa-user mr-2"></i>My
                             Profile</a></li>
-                    <li><a href="/settings" class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i
-                                class="fa-solid fa-gear mr-2"></i>Settings</a></li>
-                    <li><a href="/billing" class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i
+                    {{-- <li><a href="/settings" class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i
+                                class="fa-solid fa-gear mr-2"></i>Settings</a></li> --}}
+                    <li><a href="{{ route('billing.index') }}" class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i
                                 class="fa-solid fa-wallet mr-2"></i>Billing</a></li>
-                    <li><a href="/faqs" class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i
-                                class="fa-solid fa-circle-question mr-2"></i>FAQs</a></li>
+                    {{-- <li><a href="/faqs" class="block px-4 py-2 hover:bg-gray-100 text-gray-700"><i
+                                class="fa-solid fa-circle-question mr-2"></i>FAQs</a></li> --}}
                     <li class="border-t border-gray-100/40">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -229,6 +232,9 @@
                     <a href="{{ route('users.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
                         <i class="fa-solid fa-users mr-2"></i> Users
                     </a>
+                    <a href="{{ route('plans.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
+                        <i class="fa-solid fa-crown mr-2"></i> Plans
+                    </a>
                 @endif
             </div>
         </div>
@@ -279,6 +285,9 @@
                     class="hidden absolute bottom-16 bg-white/90 backdrop-blur-md border border-gray-200/40 rounded-xl shadow-lg w-40 flex flex-col text-gray-700">
                     <a href="{{ route('my-profile.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
                         <i class="fa-solid fa-user mr-2"></i> My Profile
+                    </a>
+                    <a href="{{ route('billing.index') }}" class="px-4 py-2 hover:bg-gray-100 flex items-center">
+                        <i class="fa-solid fa-wallet mr-2"></i> Billing
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

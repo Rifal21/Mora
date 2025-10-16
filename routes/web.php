@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\AiChatController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\BisnisController;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogPostController;
@@ -33,12 +35,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/konsultasi/send', [AiChatController::class, 'send'])->name('ai.chat.send');
     Route::resource('blogPosts', BlogPostController::class);
     Route::get('/blogPost/{slug}', [BlogPostController::class, 'read'])->name('blogPosts.read');
+    Route::get('/billing', [BillingController::class, 'index'])->name('billing.index');
+    Route::get('/billing/checkout/{planId}', [BillingController::class, 'checkout'])->name('billing.checkout');
+    Route::get('/billing/pending/{id}', [BillingController::class, 'pending'])->name('billing.pending');
+    Route::get(
+        '/billing/success/{plan}',
+        fn($plan) =>
+        view('main.billing.success', ['plan' => \App\Models\Plan::findOrFail($plan)])
+    )->name('billing.success');
+    Route::post('/billing/callback', [BillingController::class, 'callback'])->name('billing.callback');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
     Route::get('/blogPost-list', [BlogPostController::class, 'list'])->name('blogPosts.list');
     Route::resource('blogCategories', BlogCategoryController::class);
     Route::resource('users', ManagementUserController::class);
+    Route::resource('admin/plans', PlanController::class);
 });
 
 Route::middleware('auth')->group(function () {

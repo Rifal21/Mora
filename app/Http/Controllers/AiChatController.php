@@ -17,7 +17,7 @@ class AiChatController extends Controller
         $message = $request->input('message');
 
         if(auth()->user()->profile->user_type == 'free' && auth()->user()->profile->quota_ai <= 0 ) {
-            return response()->json(['reply' => 'Maaf, quota AI kamu telah habis. Silahkan upgrade ke premium untuk mendapatkan quota AI lebih banyak.'], 403);
+            return response()->json(['reply' => 'Maaf, quota AI kamu telah habis. Silahkan upgrade ke premium untuk mendapatkan quota AI lebih banyak. <br> <a href="/billing" class="px-2 py-1 bg-blue-500 text-white rounded">Upgrade Sekarang</a>'], 403);
         }
         if(auth()->user()->profile->user_type == 'free' && auth()->user()->profile->quota_ai > 0 ) {    
             auth()->user()->profile->decrement('quota_ai', 1);
