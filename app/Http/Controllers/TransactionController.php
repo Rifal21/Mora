@@ -26,13 +26,8 @@ class TransactionController extends Controller
         $user = Auth::user();
         $bisnisList = $user->bisnis()->pluck('id');
         $transactions = Transaction::with(['bisnis', 'user'])
-            ->where(function ($q) use ($bisnisList, $user) {
-                if ($bisnisList->isNotEmpty()) {
-                    $q->whereIn('bisnis_id', $bisnisList)
-                        ->orWhere('user_id', $user->id);
-                } else {
-                    $q->where('user_id', $user->id);
-                }
+            ->where(function ($q) use ($bisnisList) {
+                    $q->whereIn('bisnis_id', $bisnisList);                       
             })
             ->latest()
             ->paginate(20);
