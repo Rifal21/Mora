@@ -57,6 +57,82 @@
                 <p class="text-gray-600">Belum ada bisnis. Tambahkan bisnis baru!</p>
             @endforelse
         </div>
+        @if (auth()->check() && auth()->user()->role->name === 'Super Admin')
+            {{-- table bisnis --}}
+            <div class="mt-8 overflow-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-store text-indigo-600"></i> Data Bisnis
+                </h2>
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Nama Bisnis
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Nama Pemilik
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Alamat
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Telepon
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Email
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Aksi
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach ($bisnisAdminList as $bisnis)
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $bisnis->name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $bisnis->user->name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $bisnis->alamat }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $bisnis->telepon }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $bisnis->email }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ $bisnis->status }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <button onclick="openEditModal({{ $bisnis }})"
+                                        class="text-blue-600 hover:text-blue-800">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                    <form action="{{ route('bisnis.destroy', $bisnis->id) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Yakin ingin menghapus bisnis ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="">
+                    {{ $bisnisAdminList->links() }}
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Modal Tambah Bisnis -->

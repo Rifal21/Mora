@@ -18,8 +18,9 @@ class BisnisController extends Controller
     public function index()
     {
         $bisnisList = Auth::user()->bisnis()->latest()->get();
+        $bisnisAdminList = Bisnis::with('user')->latest()->paginate(5);
 
-        return view('main.bisnis.index', compact('bisnisList'));
+        return view('main.bisnis.index', compact('bisnisList', 'bisnisAdminList'));
     }
 
     /**
