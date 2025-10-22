@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         if (!Auth::check()) {
-            $news = BlogPost::latest()->limit(5)->get();
+            $news = BlogPost::latest()->limit(6)->get();
             $billing = Plan::where('is_active', true)->get();
             return view('main.index', [
                 'balance' => 0,
@@ -70,7 +70,7 @@ class HomeController extends Controller
         $chartLabels = $chartData->pluck('day')->map(fn($d) => Carbon::parse($d)->format('d M'));
         $chartIncome = $chartData->pluck('income');
         $chartExpense = $chartData->pluck('expense');
-        $news = BlogPost::latest()->limit(5)->get();
+        $news = BlogPost::latest()->limit(6)->get();
         $billing = Plan::where('is_active', true)->get();
         
 
