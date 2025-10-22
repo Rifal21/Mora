@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
+use App\Models\Plan;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,8 @@ class HomeController extends Controller
     public function index()
     {
         if (!Auth::check()) {
+            $news = BlogPost::latest()->limit(5)->get();
+            $billing = Plan::where('is_active', true)->get();
             return view('main.index', [
                 'balance' => 0,
                 'income' => 0,
@@ -21,6 +25,8 @@ class HomeController extends Controller
                 'chartLabels' => collect(),
                 'chartIncome' => collect(),
                 'chartExpense' => collect(),
+                'news' => $news,
+                'billing' => $billing
             ]);
         }
 
@@ -64,6 +70,9 @@ class HomeController extends Controller
         $chartLabels = $chartData->pluck('day')->map(fn($d) => Carbon::parse($d)->format('d M'));
         $chartIncome = $chartData->pluck('income');
         $chartExpense = $chartData->pluck('expense');
+        $news = BlogPost::latest()->limit(5)->get();
+        $billing = Plan::where('is_active', true)->get();
+        
 
         return view('main.index', [
             'balance' => $balance,
@@ -73,6 +82,8 @@ class HomeController extends Controller
             'chartLabels' => $chartLabels,
             'chartIncome' => $chartIncome,
             'chartExpense' => $chartExpense,
+            'news' => $news,
+            'billing' => $billing
         ]);
     }
 }

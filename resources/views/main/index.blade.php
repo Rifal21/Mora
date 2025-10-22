@@ -91,6 +91,62 @@
         </div>
     </div>
 
+    <!-- Paket Langganan -->
+    <div class="container mx-auto px-4 py-14 mt-10">
+        <div class="text-center mb-10">
+            <h2 class="font-bold text-2xl uppercase mb-2 text-gray-800">Pilih Paket Langganan</h2>
+            <p class="text-gray-500">Pilih paket sesuai kebutuhanmu dan nikmati semua fitur premium.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach ($billing as $package)
+                <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg hover:-translate-y-1 transition">
+                    <h3 class="text-xl font-bold text-indigo-600 mb-2">{{ $package->name }}</h3>
+                    <p class="text-gray-500 mb-4 h-14">{{ Str::limit($package->description, 80) }}</p>
+                    <p class="text-3xl font-extrabold text-gray-900 mb-4">
+                        Rp{{ number_format($package->price, 0, ',', '.') }}
+                    </p>
+                    <a href="#"
+                        class="block text-center bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition">
+                        Pilih Paket
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- Berita Terbaru -->
+    <div class="container mx-auto px-4 py-14">
+        <div class="text-center mb-10">
+            <h2 class="font-bold text-2xl uppercase mb-2 text-gray-800">Berita Terbaru</h2>
+            <p class="text-gray-500">Dapatkan update dan tips terbaru seputar bisnis & keuangan.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach ($news->take(5) as $item)
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
+                    @if ($item->thumbnail)
+                        <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->title }}"
+                            class="w-full h-48 object-cover">
+                    @endif
+                    <div class="p-5">
+                        <p class="text-sm text-gray-400 mb-1">
+                            {{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
+                        <img src="{{ asset('storage/' . $item->image) }}" alt="">
+                        <h3 class="font-bold text-lg text-gray-800 mb-2 line-clamp-2">{{ $item->title }}</h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            {{ Str::limit(strip_tags($item->content), 100) }}
+                        </p>
+                        <a href="{{ route('blogPosts.read', $item->slug) }}"
+                            class="text-indigo-600 font-semibold hover:text-indigo-800 transition">
+                            Baca Selengkapnya →
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
