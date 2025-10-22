@@ -123,7 +123,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach ($news->take(5) as $item)
+            @foreach ($news as $item)
                 <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
                     @if ($item->thumbnail)
                         <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->title }}"
