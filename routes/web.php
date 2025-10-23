@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\AiChatController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\BisnisController;
 use App\Http\Controllers\BlogCategoryController;
@@ -61,5 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])
+    ->name('google.redirect');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])
+    ->name('google.callback');
+
 
 require __DIR__.'/auth.php';

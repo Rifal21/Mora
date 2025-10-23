@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
             'role_id' => $role?->id,
         ]);
 
-        $quota_ai = 100;
+        $quota_ai = 20;
 
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
                 'birth_date'     => $validated['birth_date'] ?? null,
                 'gender'         => $validated['gender'] ?? null,
                 'quota_ai'       => $quota_ai,
-                'quota_trx' => 100
+                'quota_trx' => 20
             ]
         );
 
@@ -70,6 +70,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('home', absolute: false));
+        // return redirect(route('home', absolute: false));
+        return redirect()->route('verification.notice')
+            ->with('status', 'Kami telah mengirimkan link verifikasi ke email Anda. Silakan cek email Anda untuk melanjutkan.');
     }
 }
