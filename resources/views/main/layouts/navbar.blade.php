@@ -1,7 +1,7 @@
 <!-- Floating Navbar (Desktop Only) -->
 <nav
     class="hidden xl:flex fixed top-6 left-1/2 -translate-x-1/2 w-[90%] sm:w-[80%] z-50 
-           bg-white/10 backdrop-blur-lg border border-white/20 
+           bg-white/80 backdrop-blur-lg border border-white/80 
            shadow-[0_8px_32px_rgba(31,38,135,0.37)] 
            rounded-full px-6 py-3 items-center justify-between transition-all duration-300">
 
@@ -61,7 +61,7 @@
     <div class="flex items-center space-x-4">
         <!-- User Type Badge -->
         @auth
-            <div class="p-2 rounded-full focus:ring-2 focus:ring-white/30">
+            <div class="p-2 rounded-full focus:ring-2 focus:ring-white/30 flex items-center space-x-4 ">
                 @if (Auth::user()->profile->user_type === 'pro')
                     <div
                         class="badge bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-md py-1 px-2 rounded-lg">
@@ -69,8 +69,16 @@
                     </div>
                 @else
                     <div class="badge bg-sky-500 text-white font-semibold shadow-md py-1 px-2 rounded-lg">
-                        <i class="fa-solid fa-user mr-1"></i> Free
+                        <i class="fa-solid fa-leaf mr-1"></i> Free
                     </div>
+                    <a href="{{ route('cart.index') }}" class="relative">
+                        <i class="fa-solid fa-shopping-cart text-xl"></i>
+                        @if (session('cart'))
+                            <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-2">
+                                {{ count(session('cart')) }}
+                            </span>
+                        @endif
+                    </a>
                 @endif
             </div>
         @endauth
@@ -161,10 +169,25 @@
             </span>
         @else
             <span class="bg-sky-500 text-white text-sm font-semibold py-1 px-2 rounded-lg shadow">
-                <i class="fa-solid fa-user mr-1"></i> Free
+                <i class="fa-solid fa-leaf mr-1"></i> Free
             </span>
+            <a href="{{ route('cart.index') }}" class="relative">
+                <i class="fa-solid fa-shopping-cart text-xl"></i>
+                @if (session('cart'))
+                    <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-2">
+                        {{ count(session('cart')) }}
+                    </span>
+                @endif
+            </a>
         @endif
     @endauth
+    @guest
+        <span class="bg-blue-500 text-white text-sm font-semibold py-1 px-2 rounded-lg shadow">
+            <a href="{{ route('login') }}">
+                <i class="fa-solid fa-right-to-bracket mr-1"></i> Login
+            </a>
+        </span>
+    @endguest
 </div>
 
 

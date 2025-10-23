@@ -19,7 +19,8 @@ class PaymentTransaction extends Model
         'payment_method',
         'status',
         'doku_response',
-        'payment_url'
+        'payment_url',
+        'paid_at',
     ];
     protected $casts = ['doku_response' => 'array'];
 

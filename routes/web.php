@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
         view('main.billing.success', ['plan' => \App\Models\Plan::findOrFail($plan)])
     )->name('billing.success');
     Route::post('/billing/callback', [BillingController::class, 'callback'])->name('billing.callback');
+    Route::get('/cart', [HomeController::class, 'cart'])->name('cart.index');
+    Route::post('/cart/add', [HomeController::class, 'add'])->name('cart.add');
+    Route::delete('/cart/remove/{id}', [HomeController::class, 'remove'])->name('cart.remove');
 });
 
 Route::middleware('auth', 'admin')->group(function () {

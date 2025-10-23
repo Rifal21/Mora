@@ -20,6 +20,7 @@ class DokuNotificationController extends Controller
         $data = $request->all();
         $invoiceNumber = $data['order']['invoice_number'] ?? null;
         $status = $data['transaction']['status'] ?? null;
+        $payment_method = $data['acquirer']['id'] ?? null;
 
         if (!$invoiceNumber) {
             return response()->json(['message' => 'Invalid payload: missing invoice number'], 400);
@@ -38,6 +39,8 @@ class DokuNotificationController extends Controller
                 $transaction->update([
                     'status' => 'success',
                     'paid_at' => Carbon::now(),
+                    'payment_method' => $payment_method,
+                    'doku_response' => $data
                 ]);
 
                 // Update profil user jadi PRO

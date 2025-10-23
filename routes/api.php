@@ -4,10 +4,18 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BlogCategoryController;
 use App\Http\Controllers\Api\BlogPostController;
 use App\Http\Controllers\Api\DokuNotificationController;
+use App\Models\PaymentTransaction;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/doku/notif-hook', [DokuNotificationController::class, 'handleNotification']);
+Route::get('/transaction/status/{invoice}', function ($invoice) {
+    $transaction = PaymentTransaction::where('invoice_number', $invoice)->first();
+
+    return response()->json([
+        'status' => $transaction ? $transaction->status : 'not_found',
+    ]);
+});
 
 // Public routes
 Route::get('/categories', [BlogCategoryController::class, 'index']);

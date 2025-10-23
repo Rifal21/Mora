@@ -17,17 +17,29 @@ class BillingController extends Controller
     {
         $user = Auth::user();
 
-        // Jika Super Admin → lihat semua user dan paket mereka
+        // 🧑‍💼 Jika Super Admin → lihat semua user dan paket mereka
         if ($user->role && $user->role->name === 'Super Admin') {
-            $allUsers = User::with(['profile', 'paymentTransactions.plan', 'subscriptions.plan'])->get();
+            $allUsers = User::with([
+                'profile',
+                'paymentTransactions.plan',
+                'subscriptions' => function ($q) {
+                    $q->latest('start_date'); // urutkan subscription terbaru
+                },
+            ])->latest()->get();
+
+            $transactions = PaymentTransaction::with(['user', 'plan'])
+                ->latest()
+                ->paginate(8);
+
             return view('main.billing.index', [
                 'allUsers' => $allUsers,
                 'plans' => null,
                 'transaction' => null,
+                'transactions' => $transactions
             ]);
         }
 
-        // Jika user biasa → cek apakah dia punya transaksi aktif
+        // 👤 Jika user biasa → cek apakah dia punya transaksi aktif
         if ($user->role && $user->role->name === 'User') {
             $transaction = PaymentTransaction::where('user_id', $user->id)
                 ->latest()
@@ -39,21 +51,44 @@ class BillingController extends Controller
             }
         }
 
-        // Default: tampilkan daftar plan aktif
-        $plans = Plan::where('is_active', true)->get();
-        $subsctiption = Subscription::where('user_id', $user->id)->first();
+        // 💳 Default: tampilkan daftar plan aktif (urutan terbaru)
+        $plans = Plan::where('is_active', true)
+            ->latest('created_at')
+            ->get();
+
+        // 🔄 Ambil subscription terbaru user
+        $subscription = Subscription::where('user_id', $user->id)
+            ->latest('start_date')
+            ->first();
+
+        $transactions = PaymentTransaction::with('plan')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->paginate(10);
+
         return view('main.billing.index', [
             'plans' => $plans,
             'transaction' => $transaction ?? null,
             'allUsers' => null,
-            'subscription' => $subsctiption
+            'subscription' => $subscription,
+            'transactions' => $transactions
         ]);
     }
+
 
 
     // Proses pembelian paket
     public function checkout(Request $request, $planId)
     {
+        $cart = session('cart', []);
+
+        if (!isset($cart[$planId])) {
+            return redirect()->route('cart.index')->with('error', 'Paket tidak ditemukan di keranjang.');
+        }
+        $package = $cart[$planId];
+
+        session()->forget('cart');
+
         $plan = Plan::findOrFail($planId);
         $user = Auth::user();
 
