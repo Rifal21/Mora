@@ -24,6 +24,18 @@
                 <h1 class="text-2xl font-bold tracking-tight drop-shadow-lg">Selamat Datang Kembali 👋</h1>
                 <p class="text-sm text-gray-200 mt-1">Masuk untuk mengelola bisnis Anda</p>
             </div>
+            <div class="text-center">
+                <a href="{{ route('google.redirect') }}"
+                    class="w-full inline-flex items-center justify-center gap-2 py-2 bg-white/90 hover:bg-white text-gray-700 rounded-xl shadow-md transition-all duration-300">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                    <span class="font-semibold">Masuk dengan Google</span>
+                </a>
+            </div>
+            <div class="flex items-center my-6">
+                <div class="flex-grow h-px bg-white/20"></div>
+                <span class="px-3 text-sm text-gray-300">atau</span>
+                <div class="flex-grow h-px bg-white/20"></div>
+            </div>
 
             <!-- Session Status -->
             <x-auth-session-status class="mb-4" :status="session('status')" />
