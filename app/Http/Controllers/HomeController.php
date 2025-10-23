@@ -86,4 +86,44 @@ class HomeController extends Controller
             'billing' => $billing
         ]);
     }
+    public function cart()
+    {
+        $cart = session('cart', []);
+        $total = collect($cart)->sum('price');
+        return view('main.cart.index', compact('cart', 'total'));
+    }
+    // CartController.php
+    public function add(Request $request)
+    {
+        $user = Auth::user();
+        if($user->subscriptions()->where('status', 'active')->exists()) {
+            return redirect()->route('billing.index')->with('error', 'Anda sudah memiliki paket aktif!');
+        }
+        $packageId = $request->input('package_id');
+        $package = Plan::findOrFail($packageId);
+
+        $cart = session()->get('cart', []);
+
+        // Jika sudah ada di cart, jangan duplikasi
+        if (!isset($cart[$packageId])) {
+            $cart[$packageId] = [
+                'id' => $packageId,
+                'name' => $package->name,
+                'price' => $package->price,
+                'duration_days' => $package->duration_days,
+            ];
+        }
+
+        session(['cart' => $cart]);
+
+        return redirect()->route('cart.index')->with('success', 'Paket berhasil ditambahkan ke keranjang!');
+    }
+    public function remove($id)
+    {
+        $cart = session()->get('cart', []);
+        unset($cart[$id]);
+        session(['cart' => $cart]);
+
+        return redirect()->route('cart.index')->with('success', 'Item dihapus dari keranjang.');
+    }
 }
