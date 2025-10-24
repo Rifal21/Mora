@@ -29,7 +29,7 @@
     <meta name="twitter:image" content="@yield('twitter_image', asset('images/og-image.png'))">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    {{-- <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> --}}
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
@@ -46,6 +46,7 @@
     <!-- Styles tambahan -->
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @laravelPWA
 </head>
 
 <body>
