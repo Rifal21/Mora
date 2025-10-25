@@ -110,18 +110,32 @@
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
-                // Swiper untuk carousel logo
+                const logoSwiperEl = document.querySelector(".logo-swiper .swiper-wrapper");
+
+                // --- Duplikasi otomatis biar cukup panjang untuk loop ---
+                if (logoSwiperEl && logoSwiperEl.children.length < 10) {
+                    const slides = Array.from(logoSwiperEl.children);
+                    const cloneCount = Math.ceil(10 / slides.length); // minimal 10 slide total
+                    for (let i = 0; i < cloneCount; i++) {
+                        slides.forEach(slide => {
+                            const clone = slide.cloneNode(true);
+                            logoSwiperEl.appendChild(clone);
+                        });
+                    }
+                }
+
+                // --- Inisialisasi Swiper ---
                 new Swiper(".logo-swiper", {
                     slidesPerView: 2.5,
                     spaceBetween: 40,
                     loop: true,
-                    speed: 3000, // semakin kecil semakin cepat
+                    speed: 3000,
                     freeMode: true,
                     autoplay: {
                         delay: 0,
                         disableOnInteraction: false,
                     },
-                    allowTouchMove: false, // biar nggak bisa di-drag, jadi benar-benar auto jalan
+                    allowTouchMove: false,
                     breakpoints: {
                         640: {
                             slidesPerView: 3.5,
