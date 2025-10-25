@@ -25,7 +25,7 @@ class BillingController extends Controller
                 'subscriptions' => function ($q) {
                     $q->latest('start_date'); // urutkan subscription terbaru
                 },
-            ])->latest()->get();
+            ])->latest()->paginate(10);
 
             $transactions = PaymentTransaction::with(['user', 'plan'])
                 ->latest()
@@ -91,6 +91,23 @@ class BillingController extends Controller
 
         $plan = Plan::findOrFail($planId);
         $user = Auth::user();
+
+        $profile = $user->profile;
+        if ($profile && ($profile->user_type ?? null) === 'pro') {
+            return redirect()->route('billing.index')->with('error', 'Anda sudah memiliki paket aktif!');
+        }
+
+        $requiredProfileFields = [
+            'address', 'phone_number', 'no_ktp',
+            'gender', 'birth_date', 'place_of_birth', 'religion'
+        ];
+
+        foreach ($requiredProfileFields as $field) {
+            if (empty($profile->{$field})) {
+                return redirect()->route('my-profile.index')
+                    ->with('error', 'Profil Anda belum lengkap. Lengkapi data profil sebelum melanjutkan pembelian.');
+            }
+        }
 
         // Buat invoice unik
         $invoice = 'INV-' . strtoupper(Str::random(10));

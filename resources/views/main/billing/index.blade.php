@@ -123,6 +123,10 @@
                 </table>
             </div>
 
+            <div class="mt-4">
+                {{ $allUsers->links() }}
+            </div>
+
 
 
 
@@ -205,6 +209,7 @@
                             <th class="px-6 py-3 text-left">User</th>
                             <th class="px-6 py-3 text-left">Paket</th>
                             <th class="px-6 py-3 text-left">Jumlah</th>
+                            <th class="px-6 py-3 text-left">Metode Pembayaran</th>
                             <th class="px-6 py-3 text-left">Status</th>
                             <th class="px-6 py-3 text-left">Tanggal</th>
                             <th class="px-6 py-3 text-left">Dibayar</th>
@@ -220,6 +225,9 @@
                                 <td class="px-6 py-4">{{ $trx->plan->name ?? '-' }}</td>
                                 <td class="px-6 py-4">
                                     Rp{{ number_format($trx->amount, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $trx->payment_method }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
@@ -353,6 +361,75 @@
                             </form>
                         </div>
                     @endforeach
+                </div>
+
+                <h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6 text-center">🧾 Riwayat Transaksi</h2>
+
+                <div class="overflow-x-auto shadow-lg rounded-lg bg-white">
+                    <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+                        <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
+                            <tr>
+                                <th class="px-6 py-3 text-left">No</th>
+                                <th class="px-6 py-3 text-left">Invoice Number</th>
+                                <th class="px-6 py-3 text-left">User</th>
+                                <th class="px-6 py-3 text-left">Paket</th>
+                                <th class="px-6 py-3 text-left">Jumlah</th>
+                                <th class="px-6 py-3 text-left">Metode Pembayaran</th>
+                                <th class="px-6 py-3 text-left">Status</th>
+                                <th class="px-6 py-3 text-left">Tanggal</th>
+                                <th class="px-6 py-3 text-left">Dibayar</th>
+                                <th class="px-6 py-3 text-left">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 text-gray-700">
+                            @forelse ($transactions as $trx)
+                                <tr>
+                                    <td class="px-6 py-4">{{ $loop->iteration }}</td>
+                                    <td class="px-6 py-4">{{ $trx->invoice_number }}</td>
+                                    <td class="px-6 py-4 font-semibold">{{ $trx->user->name ?? '-' }}</td>
+                                    <td class="px-6 py-4">{{ $trx->plan->name ?? '-' }}</td>
+                                    <td class="px-6 py-4">
+                                        Rp{{ number_format($trx->amount, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $trx->payment_method ?? '-' }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="px-3 py-1 rounded-full text-sm font-semibold
+                            {{ $trx->status === 'success' ? 'bg-green-100 text-green-700' : ($trx->status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                                            {{ ucfirst($trx->status) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ \Carbon\Carbon::parse($trx->created_at)->format('d M Y, H:i') }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $trx->paid_at ? \Carbon\Carbon::parse($trx->paid_at)->format('d M Y, H:i') : '-' }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @if ($trx->status === 'pending' && $trx->paid_at === null)
+                                            <a href="{{ $trx->payment_url }}"
+                                                class="px-3 py-2 bg-indigo-500 text-white rounded-lg" title="Bayar"><i
+                                                    class="fa-solid fa-coins text=lg"></i></a>
+                                        @elseif ($trx->status === 'success')
+                                            <a href="#" onclick="alert('Comming Soon')"
+                                                class="px-3 py-2 bg-green-500 text-white rounded-lg" title="Receipt"><i
+                                                    class="fa-solid fa-receipt text=lg"></i></a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-gray-500">Belum ada transaksi.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $transactions->links() }}
                 </div>
 
             </section>
