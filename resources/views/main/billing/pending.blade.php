@@ -33,8 +33,11 @@
                             <th class="text-left px-6 py-4 font-semibold text-gray-700">Status</th>
                             <td class="px-6 py-4">
                                 <span id="statusBadge"
-                                    class="px-3 py-1 rounded-full text-sm font-semibold 
-                                    {{ $transaction->status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }}">
+                                    class="px-3 py-1 rounded-full text-sm font-semibold {{ $transaction->status === 'pending'
+                                        ? 'bg-yellow-100 text-yellow-700'
+                                        : ($transaction->status === 'failed'
+                                            ? 'bg-red-100 text-red-700'
+                                            : 'bg-green-100 text-green-700') }}">
                                     {{ ucfirst($transaction->status) }}
                                 </span>
                             </td>
@@ -88,6 +91,12 @@
                             }`;
 
                         if (data.status === "success") {
+                            clearInterval(interval);
+                            setTimeout(() => {
+                                window.location.href = "{{ route('billing.index') }}";
+                            }, 2000);
+                        }
+                        if (data.status === "failed") {
                             clearInterval(interval);
                             setTimeout(() => {
                                 window.location.href = "{{ route('billing.index') }}";

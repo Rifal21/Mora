@@ -55,7 +55,7 @@
         <!-- Full Name -->
         <div>
             <label for="full_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                <i class="fa-solid fa-id-card mr-1 text-blue-600"></i> Full Name
+                <i class="fa-solid fa-id-card mr-1 text-blue-600"></i> Nama Lengkap <span class="text-red-500">*</span>
             </label>
             <input id="full_name" name="full_name" type="text"
                 value="{{ old('full_name', Auth::user()->profile->full_name ?? '') }}"
@@ -66,15 +66,17 @@
         <!-- Gender -->
         <div>
             <label for="gender" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                <i class="fa-solid fa-venus-mars mr-1 text-blue-600"></i> Gender
+                <i class="fa-solid fa-venus-mars mr-1 text-blue-600"></i> Jenis Kelamin <span
+                    class="text-red-500">*</span>
             </label>
             <select id="gender" name="gender"
                 class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-100">
-                <option value="">Select Gender</option>
-                <option value="male"
-                    {{ old('gender', Auth::user()->profile->gender ?? '') == 'male' ? 'selected' : '' }}>Male</option>
-                <option value="female"
-                    {{ old('gender', Auth::user()->profile->gender ?? '') == 'female' ? 'selected' : '' }}>Female
+                <option value="">Pilih Jenis Kelamin</option>
+                <option value="Laki-laki"
+                    {{ old('gender', Auth::user()->profile->gender ?? '') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki
+                </option>
+                <option value="Perempuan"
+                    {{ old('gender', Auth::user()->profile->gender ?? '') == 'Perempuan' ? 'selected' : '' }}>Perempuan
                 </option>
             </select>
         </div>
@@ -83,7 +85,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="place_of_birth" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <i class="fa-solid fa-location-dot mr-1 text-blue-600"></i> Place of Birth
+                    <i class="fa-solid fa-location-dot mr-1 text-blue-600"></i> Tempat Lahir <span
+                        class="text-red-500">*</span>
                 </label>
                 <input id="place_of_birth" name="place_of_birth" type="text"
                     value="{{ old('place_of_birth', Auth::user()->profile->place_of_birth ?? '') }}"
@@ -91,7 +94,8 @@
             </div>
             <div>
                 <label for="birth_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <i class="fa-solid fa-calendar-day mr-1 text-blue-600"></i> Date of Birth
+                    <i class="fa-solid fa-calendar-day mr-1 text-blue-600"></i> Tanggal Lahir <span
+                        class="text-red-500">*</span>
                 </label>
                 <input id="birth_date" name="birth_date" type="date"
                     value="{{ old('birth_date', Auth::user()->profile->birth_date ?? '') }}"
@@ -103,7 +107,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="phone_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <i class="fa-solid fa-phone mr-1 text-blue-600"></i> Phone Number
+                    <i class="fa-solid fa-phone mr-1 text-blue-600"></i> Nomor HP/WA <span class="text-red-500">*</span>
                 </label>
                 <input id="phone_number" name="phone_number" type="text"
                     value="{{ old('phone_number', Auth::user()->profile->phone_number ?? '') }}" placeholder="+62..."
@@ -112,7 +116,8 @@
 
             <div>
                 <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <i class="fa-solid fa-map-location-dot mr-1 text-blue-600"></i> Address
+                    <i class="fa-solid fa-map-location-dot mr-1 text-blue-600"></i> Alamat Lengkap <span
+                        class="text-red-500">*</span>
                 </label>
                 <input id="address" name="address" type="text"
                     value="{{ old('address', Auth::user()->profile->address ?? '') }}"
@@ -124,7 +129,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="no_ktp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <i class="fa-solid fa-id-card-clip mr-1 text-blue-600"></i> No. KTP
+                    <i class="fa-solid fa-id-card-clip mr-1 text-blue-600"></i> No. KTP <span
+                        class="text-red-500">*</span>
                 </label>
                 <input id="no_ktp" name="no_ktp" type="text"
                     value="{{ old('no_ktp', Auth::user()->profile->no_ktp ?? '') }}"
@@ -132,7 +138,8 @@
             </div>
             <div>
                 <label for="no_npwp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <i class="fa-solid fa-file-invoice-dollar mr-1 text-blue-600"></i> No. NPWP
+                    <i class="fa-solid fa-file-invoice-dollar mr-1 text-blue-600"></i> No. NPWP <span
+                        class="text-red-500 italic">* (jika ada)</span>
                 </label>
                 <input id="no_npwp" name="no_npwp" type="text"
                     value="{{ old('no_npwp', Auth::user()->profile->no_npwp ?? '') }}"
@@ -143,12 +150,23 @@
         <!-- Religion -->
         <div>
             <label for="religion" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                <i class="fa-solid fa-hands-praying mr-1 text-blue-600"></i> Religion
+                <i class="fa-solid fa-hands-praying mr-1 text-blue-600"></i> Agama <span class="text-red-500">*</span>
             </label>
-            <input id="religion" name="religion" type="text"
+            {{-- <input id="religion" name="religion" type="text"
                 value="{{ old('religion', Auth::user()->profile->religion ?? '') }}"
                 placeholder="e.g., Islam, Christian, Hindu..."
-                class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-100">
+                class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-100"> --}}
+            <select name="religion" id="religion"
+                class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-100 ">
+                <option value="" selected>Pilih Agama</option>
+                <option value="islam">Islam</option>
+                <option value="christian">Christian</option>
+                <option value="hindu">Hindu</option>
+                <option value="budha">Budha</option>
+                <option value="konghucu">Konghucu</option>
+                <option value="katolik">Katolik</option>
+                <option value="lainnya">Lainnya</option>
+            </select>
         </div>
 
         <!-- Save Button -->

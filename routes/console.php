@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\CancelPendingPaymentsJob;
 use App\Jobs\UpdateSubscriptionStatusJob;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -10,3 +11,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('subscription:update-status')->everyMinute();
+Schedule::command('payment:cancel')->everyMinute();
