@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bisnis;
 use App\Models\BlogPost;
 use App\Models\Plan;
 use App\Models\Transaction;
@@ -17,6 +18,7 @@ class HomeController extends Controller
         if (!Auth::check()) {
             $news = BlogPost::latest()->limit(6)->get();
             $billing = Plan::where('is_active', true)->get();
+            $bisnis = Bisnis::all();
             return view('main.index', [
                 'balance' => 0,
                 'income' => 0,
@@ -26,7 +28,8 @@ class HomeController extends Controller
                 'chartIncome' => collect(),
                 'chartExpense' => collect(),
                 'news' => $news,
-                'billing' => $billing
+                'billing' => $billing,
+                'bisnis' => $bisnis
             ]);
         }
 
@@ -72,6 +75,7 @@ class HomeController extends Controller
         $chartExpense = $chartData->pluck('expense');
         $news = BlogPost::latest()->limit(6)->get();
         $billing = Plan::where('is_active', true)->get();
+        $bisnis = Bisnis::all();
         
 
         return view('main.index', [
@@ -83,7 +87,8 @@ class HomeController extends Controller
             'chartIncome' => $chartIncome,
             'chartExpense' => $chartExpense,
             'news' => $news,
-            'billing' => $billing
+            'billing' => $billing,
+            'bisnis' => $bisnis
         ]);
     }
     public function cart()
