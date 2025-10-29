@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TransactionMail;
 use App\Models\PaymentTransaction;
 use App\Models\Subscription;
 use App\Models\UserProfile;
@@ -58,7 +59,7 @@ class DokuNotificationController extends Controller
                     ['user_id' => $transaction->user_id, 'plan_id' => $transaction->plan_id],
                     ['start_date' => $start, 'end_date' => $end, 'status' => 'active']
                 );
-
+                TransactionMail::dispatch($transaction);
                 break;
 
             case 'failed':

@@ -12,3 +12,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('subscription:update-status')->everyMinute();
 Schedule::command('payment:cancel')->everyMinute();
+Schedule::command('subscriptions:check-expiry')->hourly();

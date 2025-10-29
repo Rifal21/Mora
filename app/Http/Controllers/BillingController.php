@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TransactionMail;
 use App\Models\{Plan, Subscription, PaymentTransaction, User};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -183,6 +184,8 @@ class BillingController extends Controller
             $transaction->update([
                 'payment_url' => $data['response']['payment']['url'],
             ]);
+
+            TransactionMail::dispatch($transaction);
 
             // Redirect user ke halaman pembayaran DOKU
             return redirect()->away($data['response']['payment']['url']);
