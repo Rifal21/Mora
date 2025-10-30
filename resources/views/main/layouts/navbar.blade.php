@@ -155,7 +155,7 @@
 <!-- Mobile Header -->
 <div
     class="xl:hidden fixed top-0 left-0 w-full flex justify-between items-center px-5 py-3  bg-white/20 border-b  z-50 backdrop-blur-lg border border-white/20 shadow-[0_8px_32px_rgba(31,38,135,0.37)] 
-           rounded-xl transition-all duration-300 mt-3">
+           rounded-full transition-all duration-300 mt-3">
     <!-- Logo kiri -->
     <a href="/">
         <img src="{{ asset('assets/images/logo mora.png') }}" class="w-16 h-10 object-cover" alt="Mora Logo">

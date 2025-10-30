@@ -19,6 +19,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->bisnis()->count() == 0){
+            return redirect()->route('bisnis.index')->with('warning', 'Anda belum memiliki bisnis. Silahkan tambahkan bisnis terlebih dahulu.');
+        }
         $bisnis = Bisnis::all();
         $bisnis_set = session('bisnis_id');
         $products = Product::where('bisnis_id', $bisnis_set)->where('stock', '>', 0)->latest()->get();
