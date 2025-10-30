@@ -102,6 +102,22 @@
                 }
             });
         @endif
+        @if (session('warning'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'warning', // success | error | info | warning
+                title: '{{ session('warning') }}',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                background: '#fff',
+                color: '#333',
+                customClass: {
+                    popup: 'rounded-xl shadow-lg'
+                }
+            });
+        @endif
     </script>
 </body>
 
