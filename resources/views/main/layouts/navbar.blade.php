@@ -158,7 +158,7 @@
            rounded-full transition-all duration-300 mt-3">
     <!-- Logo kiri -->
     <a href="/">
-        <img src="{{ asset('assets/images/logo mora.png') }}" class="w-16 h-10 object-cover" alt="Mora Logo">
+        <img src="{{ asset('assets/images/mora icon bg.png') }}" class="w-16 h-10 object-cover" alt="Mora Logo">
     </a>
     <!-- Badge kanan -->
     @auth

@@ -7,7 +7,7 @@
             <h1 class="text-2xl font-bold">Kategori Produk</h1>
             <button onclick="openModal('addCategoryModal')"
                 class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> Tambah Kategori
+                <i class="fa-solid fa-plus"></i> <span class="hidden md:flex">Tambah Kategori</span>
             </button>
         </div>
 
@@ -57,13 +57,14 @@
                         })"
                                     class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-pen"></i></button>
                                 <form action="{{ route('product-categories.destroy', $cat->id) }}" method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus kategori ini?')" class="inline">
+                                    class="delete-form inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                                    <button type="button" class="text-red-600 hover:text-red-800 text-sm delete-btn">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
+
                             </td>
                         </tr>
                     @empty
@@ -111,13 +112,14 @@
                         })"
                             class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-pen"></i></button>
                         <form action="{{ route('product-categories.destroy', $cat->id) }}" method="POST"
-                            onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
+                            class="delete-form inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                            <button type="button" class="text-red-600 hover:text-red-800 text-sm delete-btn">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
+
                     </div>
                 </div>
             @empty
@@ -159,13 +161,53 @@
         function previewImage(event, previewId) {
             const input = event.target;
             const preview = document.getElementById(previewId);
+            const uploadIcon = input.id.includes('edit') ? document.getElementById('editUploadIcon') : document
+                .getElementById('uploadIcon');
+
             if (input.files && input.files[0]) {
                 preview.src = URL.createObjectURL(input.files[0]);
                 preview.classList.remove('hidden');
+                uploadIcon.classList.add('hidden');
             } else {
                 preview.src = '';
                 preview.classList.add('hidden');
+                uploadIcon.classList.remove('hidden');
             }
         }
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.closest('.delete-form');
+
+                Swal.fire({
+                    title: 'Hapus Kategori?',
+                    text: 'Kategori ini akan dihapus secara permanen.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                    background: '#fff',
+                    customClass: {
+                        popup: 'rounded-2xl shadow-lg',
+                        confirmButton: 'rounded-lg px-4 py-2 font-semibold',
+                        cancelButton: 'rounded-lg px-4 py-2 font-semibold'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
     </script>
+    @if ($errors->any())
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const modal = document.getElementById('addCategoryModal');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+            });
+        </script>
+    @endif
 @endsection

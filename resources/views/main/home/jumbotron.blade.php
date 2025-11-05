@@ -1,4 +1,4 @@
-@auth
+    @auth
         <div class="container mx-auto px-4 py-10 mt-20">
 
             <div class="relative flex flex-col items-center justify-center overflow-hidden mb-5">
@@ -15,14 +15,16 @@
                 <!-- Greeting -->
                 <div id="greeting"
                     class="flex flex-col sm:flex-row items-center justify-center gap-3 text-center bg-white/5 backdrop-blur-lg px-6 py-1">
-                    <p id="welcomeText" class="text-lg sm:text-2xl font-semibold tracking-wide text-slate-600 drop-shadow-md">
+                    <p id="welcomeText"
+                        class="text-lg sm:text-2xl font-semibold tracking-wide text-slate-600 drop-shadow-md">
                         Selamat Datang,
                         <span id="userName"
                             class="font-serif font-bold text-slate-700 bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">
                             {{ Auth::user()->name }}
                         </span>
                     </p>
-                    <img id="waveHand" src="{{ asset('assets/images/hi.gif') }}" class="w-36 sm:w-36 opacity-0" alt="👋">
+                    <img id="waveHand" src="{{ asset('assets/images/hi.gif') }}" class="w-36 sm:w-36 opacity-0"
+                        alt="👋">
                 </div>
             </div>
 
@@ -207,7 +209,8 @@
 
                             <!-- Pengeluaran -->
                             <div class="swiper-slide">
-                                <div class="bg-white rounded-2xl p-6 border-b-8 border-r-8 border-l border-t-2  border-red-500">
+                                <div
+                                    class="bg-white rounded-2xl p-6 border-b-8 border-r-8 border-l border-t-2  border-red-500">
                                     <div class="flex items-center justify-between">
                                         <h2 class="text-lg font-semibold text-gray-700">Total Pengeluaran</h2>
                                         <i class="fa-solid fa-circle-arrow-down text-red-500 text-xl"></i>
@@ -297,7 +300,8 @@
                                             {{ $trx->created_at ? \Carbon\Carbon::parse($trx->created_at)->format('d M Y') : '' }}
                                         </p>
                                     </div>
-                                    <p class="font-semibold {{ $trx->type === 'income' ? 'text-green-600' : 'text-red-500' }}">
+                                    <p
+                                        class="font-semibold {{ $trx->type === 'income' ? 'text-green-600' : 'text-red-500' }}">
                                         {{ $trx->type === 'income' ? '+' : '-' }}
                                         Rp{{ number_format($trx->total_amount, 0, ',', '.') }}
                                     </p>
@@ -333,7 +337,8 @@
 
                 <!-- Description -->
                 <p class="text-lg text-gray-300 mb-10">
-                    Catat pemasukan, pantau pengeluaran, dan nikmati laporan keuangan real-time dalam satu platform yang modern
+                    Catat pemasukan, pantau pengeluaran, dan nikmati laporan keuangan real-time dalam satu platform yang
+                    modern
                     dan aman.
                 </p>
 

@@ -60,7 +60,8 @@
     </main>
 
     <!-- Footer opsional -->
-    @includeWhen(View::exists('main.layouts.footer'), 'main.layouts.footer')
+    {{-- @includeWhen(View::exists('main.layouts.footer'), 'main.layouts.footer') --}}
+    @include('main.layouts.footer')
 
     <!-- Script tambahan -->
     @stack('scripts')
