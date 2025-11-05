@@ -17,7 +17,7 @@
                  <div class="swiper-slide p-3">
                      <div
                          class="relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-8 border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group">
-                         @if ($loop->first)
+                         @if ($package->transactions_count > 5)
                              <span
                                  class="absolute top-5 right-5 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                                  POPULER
@@ -68,7 +68,7 @@
          @foreach ($billing as $package)
              <div
                  class="relative bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-8 border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group">
-                 @if ($loop->first)
+                 @if ($package->transactions_count > 5)
                      <span
                          class="absolute top-5 right-5 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                          POPULER

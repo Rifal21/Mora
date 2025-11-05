@@ -17,7 +17,11 @@ class HomeController extends Controller
     {
         if (!Auth::check()) {
             $news = BlogPost::latest()->limit(6)->get();
-            $billing = Plan::where('is_active', true)->get();
+            $billing = Plan::where('is_active', true)
+                ->withCount(['transactions' => function ($q) {
+                    $q->where('status', 'success');
+                }])
+                ->get();
             $bisnis = Bisnis::all();
             return view('main.index', [
                 'balance' => 0,
@@ -74,7 +78,11 @@ class HomeController extends Controller
         $chartIncome = $chartData->pluck('income');
         $chartExpense = $chartData->pluck('expense');
         $news = BlogPost::latest()->limit(6)->get();
-        $billing = Plan::where('is_active', true)->get();
+        $billing = Plan::where('is_active', true)
+            ->withCount(['transactions' => function ($q) {
+                $q->where('status', 'success');
+            }])
+            ->get();
         $bisnis = Bisnis::all();
         
 
