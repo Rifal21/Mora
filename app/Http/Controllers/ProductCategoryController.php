@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -16,8 +17,13 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->bisnis()->count() == 0) {
+            return redirect()->route('bisnis.index')->with('warning', 'Anda belum memiliki bisnis. Silahkan tambahkan bisnis terlebih dahulu.');
+        }
         $bisnisList = auth()->user()->bisnis()->get();
-        $categories = ProductCategory::with('bisnis')->where('bisnis_id', auth()->user()->bisnis->first()->id ?? null)->latest()->get();
+        $categories = ProductCategory::whereHas('bisnis', function ($query) {
+            $query->where('user_id', auth()->user()->id ?? null);
+        })->latest()->get();
         return view('main.productCategory.index', compact('categories', 'bisnisList'));
     }
 

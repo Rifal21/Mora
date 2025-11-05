@@ -49,97 +49,200 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     // dd($request->all());
+    //     if(Auth::user()->profile->user_type === 'free'){
+    //         if(auth()->user()->profile->quota_trx <= 0){
+    //             return redirect()->route('billing.index')->with('error', 'Kuota transaksi habis. Silahkan upgrade ke pro!');
+    //         }
+    //         auth()->user()->profile->decrement('quota_trx', 1);
+    //     }
+    //     if($request->trx_type === 'catkeu') {
+    //         $validate = $request->validate([
+    //             'user_id' => 'required|exists:users,id',
+    //             'type' => 'required|in:income,expense',
+    //             'total_amount' => 'required|numeric',
+    //             'notes' => 'nullable|string',
+    //         ]);
+    //         $validate['invoice_number'] = 'TRX-' . time();
+
+    //         $transaction = Transaction::create([
+    //             'user_id' => $request->user_id,
+    //             'type' => $request->type,
+    //             'total_amount' => $request->total_amount,
+    //             'notes' => $request->notes,
+    //             'invoice_number' => $validate['invoice_number'],
+    //             'status' => 'success',
+    //         ]);
+
+    //         return redirect()->route('transactions.list')->with('success', 'Transaction created successfully');
+    //     } else {
+
+    //         // Decode JSON items menjadi array
+    //         $items = json_decode($request->items, true);
+
+    //         if (!$items || count($items) === 0) {
+    //             return back()->withErrors(['items' => 'Cart is empty'])->withInput();
+    //         }
+
+    //         // Validasi request
+    //         $request->validate([
+    //             'customer_name' => 'nullable|string',
+    //             'payment_method' => 'required|string|in:cash,qris',
+    //             'notes' => 'nullable|string',
+    //         ]);
+
+    //         // Validasi setiap item
+    //         foreach ($items as $index => $item) {
+    //             if (!isset($item['product_id'], $item['quantity'], $item['price'], $item['total'])) {
+    //                 return back()->withErrors(['items' => 'Invalid item data'])->withInput();
+    //             }
+    //             if (!\App\Models\Product::find($item['product_id'])) {
+    //                 return back()->withErrors(['items' => "Product not found: {$item['product_id']}"])->withInput();
+    //             }
+    //             if ($item['quantity'] < 1 || $item['price'] < 0 || $item['total'] < 0) {
+    //                 return back()->withErrors(['items' => 'Invalid quantity or price'])->withInput();
+    //             }
+    //         }
+
+    //         $status = $request->payment_method === 'cash' ? 'success' : 'pending';
+    //         // Simpan transaksi
+    //         $transaction = Transaction::create([
+    //             'bisnis_id' => $request->bisnis_id,
+    //             'invoice_number' => 'INV-' . strtoupper(uniqid()),
+    //             'cashier_name' => 'staff',
+    //             'customer_name' => $request->customer_name,
+    //             'total_amount' => array_sum(array_column($items, 'total')),
+    //             'payment_method' => $request->payment_method,
+    //             'notes' => $request->notes,
+    //             'status' => $status,
+    //             'type' => $status === 'success' ? 'income' : 'expense' || $request->type,
+    //         ]);
+
+    //         // Simpan items
+    //         foreach ($items as $item) {
+    //             TransactionItem::create([
+    //                 'transaction_id' => $transaction->id,
+    //                 'product_id' => $item['product_id'],
+    //                 'quantity' => $item['quantity'],
+    //                 'price' => $item['price'],
+    //                 'total' => $item['total'],
+    //             ]);
+
+    //             $product = Product::find($item['product_id']);
+    //             if($product->stock < $item['quantity']){
+    //                 return redirect()->back()->with('error', 'Stok produk tidak mencukupi.');
+    //             }
+    //             $product->decrement('stock', $item['quantity']);
+    //         }
+
+    //         return redirect()->back()->with('success', 'Transaksi Berhasil!');
+    //     }
+    // }
     public function store(Request $request)
     {
         // dd($request->all());
-        if(Auth::user()->profile->user_type === 'free'){
-            if(auth()->user()->profile->quota_trx <= 0){
-                return redirect()->route('billing.index')->with('error', 'Kuota transaksi habis. Silahkan upgrade ke pro!');
+        try {
+            if (Auth::user()->profile->user_type === 'free') {
+                if (auth()->user()->profile->quota_trx <= 0) {
+                    if ($request->expectsJson()) {
+                        return response()->json(['error' => 'Kuota transaksi habis. Silahkan upgrade ke pro!'], 403);
+                    }
+                    return redirect()->route('billing.index')->with('error', 'Kuota transaksi habis. Silahkan upgrade ke pro!');
+                }
+                auth()->user()->profile->decrement('quota_trx', 1);
             }
-            auth()->user()->profile->decrement('quota_trx', 1);
-        }
-        if($request->trx_type === 'catkeu') {
-            $validate = $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'type' => 'required|in:income,expense',
-                'total_amount' => 'required|numeric',
-                'notes' => 'nullable|string',
-            ]);
-            $validate['invoice_number'] = 'TRX-' . time();
-    
-            $transaction = Transaction::create([
-                'user_id' => $request->user_id,
-                'type' => $request->type,
-                'total_amount' => $request->total_amount,
-                'notes' => $request->notes,
-                'invoice_number' => $validate['invoice_number'],
-                'status' => 'success',
-            ]);
-    
-            return redirect()->route('transactions.list')->with('success', 'Transaction created successfully');
-        } else {
 
-            // Decode JSON items menjadi array
-            $items = json_decode($request->items, true);
-    
-            if (!$items || count($items) === 0) {
-                return back()->withErrors(['items' => 'Cart is empty'])->withInput();
-            }
-    
-            // Validasi request
-            $request->validate([
-                'customer_name' => 'nullable|string',
-                'payment_method' => 'required|string|in:cash,qris',
-                'notes' => 'nullable|string',
-            ]);
-    
-            // Validasi setiap item
-            foreach ($items as $index => $item) {
-                if (!isset($item['product_id'], $item['quantity'], $item['price'], $item['total'])) {
-                    return back()->withErrors(['items' => 'Invalid item data'])->withInput();
-                }
-                if (!\App\Models\Product::find($item['product_id'])) {
-                    return back()->withErrors(['items' => "Product not found: {$item['product_id']}"])->withInput();
-                }
-                if ($item['quantity'] < 1 || $item['price'] < 0 || $item['total'] < 0) {
-                    return back()->withErrors(['items' => 'Invalid quantity or price'])->withInput();
-                }
-            }
-    
-            $status = $request->payment_method === 'cash' ? 'success' : 'pending';
-            // Simpan transaksi
-            $transaction = Transaction::create([
-                'bisnis_id' => $request->bisnis_id,
-                'invoice_number' => 'INV-' . strtoupper(uniqid()),
-                'cashier_name' => 'staff',
-                'customer_name' => $request->customer_name,
-                'total_amount' => array_sum(array_column($items, 'total')),
-                'payment_method' => $request->payment_method,
-                'notes' => $request->notes,
-                'status' => $status,
-                'type' => $status === 'success' ? 'income' : 'expense' || $request->type,
-            ]);
-    
-            // Simpan items
-            foreach ($items as $item) {
-                TransactionItem::create([
-                    'transaction_id' => $transaction->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'total' => $item['total'],
+            if ($request->trx_type === 'catkeu') {
+                $validate = $request->validate([
+                    'user_id' => 'required|exists:users,id',
+                    'type' => 'required|in:income,expense',
+                    'total_amount' => 'required|numeric',
+                    'notes' => 'nullable|string',
                 ]);
 
-                $product = Product::find($item['product_id']);
-                if($product->stock < $item['quantity']){
-                    return redirect()->back()->with('error', 'Stok produk tidak mencukupi.');
+                $validate['invoice_number'] = 'TRX-' . time();
+
+                $transaction = Transaction::create([
+                    'user_id' => $request->user_id,
+                    'type' => $request->type,
+                    'total_amount' => $request->total_amount,
+                    'notes' => $request->notes,
+                    'invoice_number' => $validate['invoice_number'],
+                    'status' => 'success',
+                ]);
+
+                if ($request->expectsJson()) {
+                    return response()->json(['success' => true, 'message' => 'Transaction created successfully']);
                 }
-                $product->decrement('stock', $item['quantity']);
+
+                return redirect()->route('transactions.list')->with('success', 'Transaction created successfully');
+            } else {
+
+                $items = json_decode($request->items, true);
+                if (!$items || count($items) === 0) {
+                    return response()->json(['error' => 'Cart is empty'], 422);
+                }
+
+                $request->validate([
+                    'customer_name' => 'nullable|string',
+                    'payment_method' => 'required|string|in:cash,qris',
+                    'notes' => 'nullable|string',
+                ]);
+
+                foreach ($items as $item) {
+                    if (!isset($item['product_id'], $item['quantity'], $item['price'], $item['total'])) {
+                        return response()->json(['error' => 'Invalid item data'], 422);
+                    }
+                    $product = \App\Models\Product::find($item['product_id']);
+                    if (!$product) {
+                        return response()->json(['error' => "Product not found: {$item['product_id']}"], 404);
+                    }
+                    if ($product->stock < $item['quantity']) {
+                        return response()->json(['error' => 'Stok produk tidak mencukupi.'], 400);
+                    }
+                }
+
+                $status = $request->payment_method === 'cash' ? 'success' : 'pending';
+                $transaction = Transaction::create([
+                    'bisnis_id' => $request->bisnis_id,
+                    'invoice_number' => 'INV-' . strtoupper(uniqid()),
+                    'cashier_name' => 'staff',
+                    'customer_name' => $request->customer_name,
+                    'total_amount' => array_sum(array_column($items, 'total')),
+                    'payment_method' => $request->payment_method,
+                    'notes' => $request->notes,
+                    'status' => $status,
+                    'type' => $status === 'success' ? 'income' : 'expense',
+                ]);
+
+                foreach ($items as $item) {
+                    TransactionItem::create([
+                        'transaction_id' => $transaction->id,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'total' => $item['total'],
+                    ]);
+                    $product = Product::find($item['product_id']);
+                    $product->decrement('stock', $item['quantity']);
+                }
+
+                if ($request->expectsJson()) {
+                    return response()->json(['success' => true, 'message' => 'Transaksi Berhasil!']);
+                }
+
+                return redirect()->back()->with('success', 'Transaksi Berhasil!');
             }
-    
-            return redirect()->back()->with('success', 'Transaksi Berhasil!');
+        } catch (\Throwable $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Terjadi kesalahan saat menyimpan transaksi', 'detail' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan transaksi');
         }
     }
+
 
 
     /**

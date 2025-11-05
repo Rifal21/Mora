@@ -8,6 +8,7 @@ use App\Models\Bisnis;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -15,6 +16,9 @@ class ProductController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->bisnis()->count() == 0) {
+            return redirect()->route('bisnis.index')->with('warning', 'Anda belum memiliki bisnis. Silahkan tambahkan bisnis terlebih dahulu.');
+        }
         $bisnisList = auth()->user()->bisnis()->get();
         $categories = ProductCategory::with('bisnis')->where('bisnis_id', auth()->user()->bisnis->first()->id ?? null)->latest()->get();
         $products = Product::with(['bisnis', 'category'])->where('bisnis_id', auth()->user()->bisnis->first()->id ?? null)->latest()->get();

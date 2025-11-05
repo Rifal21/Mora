@@ -49,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart', [HomeController::class, 'cart'])->name('cart.index');
     Route::post('/cart/add', [HomeController::class, 'add'])->name('cart.add');
     Route::delete('/cart/remove/{id}', [HomeController::class, 'remove'])->name('cart.remove');
+    Route::post('/ai/chat/clear', function () {
+        session()->forget('ai_chat_history');
+        return redirect()->back();
+    })->name('clear.chat');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
