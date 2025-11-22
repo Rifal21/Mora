@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 
@@ -18,10 +19,14 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Request $request): void
     {
         if (config('app.env') === 'production') {
-            URL::forceScheme('https');
+
+            // Cek header X-Forwarded-Proto dari Cloudflare / proxy
+            if ($request->header('X-Forwarded-Proto') === 'https' || $request->secure()) {
+                URL::forceScheme('https');
+            }
         }
     }
 }
