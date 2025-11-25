@@ -21,12 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Request $request): void
     {
-        if (config('app.env') === 'production') {
+        // if (config('app.env') === 'production') {
 
-            // Cek header X-Forwarded-Proto dari Cloudflare / proxy
-            if ($request->header('X-Forwarded-Proto') === 'https' || $request->secure()) {
-                URL::forceScheme('https');
-            }
-        }
+        //     // Cek header X-Forwarded-Proto dari Cloudflare / proxy
+        //     if ($request->header('X-Forwarded-Proto') === 'https' || $request->secure()) {
+        //         URL::forceScheme('https');
+        //     }
+        // }
     }
 }
